@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carotid Plaque Vulnerability Assessment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="header bg-primary text-white p-3 mb-4">
+                    <h1 class="text-center">Carotid Plaque Vulnerability Assessment</h1>
+                    <p class="text-center mb-0">Clinical Decision Support System</p>
+                </div>
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header bg-light">
+                        <h3><i class="fas fa-images me-2"></i>Ultrasound Images</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h5><i class="fas fa-heart-pulse me-2"></i>Systolic Phase</h5>
+                            <input type="file" id="systolicUpload" accept="image/*" class="form-control mb-3">
+                            <div class="img-container">
+                                <img id="systolicImage" class="img-fluid" src="" alt="Systolic Image" style="display: none;">
+                            </div>
+                            <button id="cropSystolic" class="btn btn-primary mt-3" disabled>
+                                <i class="fas fa-crop me-2"></i>Crop Image
+                            </button>
+                        </div>
+                        
+                        <div>
+                            <h5><i class="fas fa-heart me-2"></i>Diastolic Phase</h5>
+                            <input type="file" id="diastolicUpload" accept="image/*" class="form-control mb-3">
+                            <div class="img-container">
+                                <img id="diastolicImage" class="img-fluid" src="" alt="Diastolic Image" style="display: none;">
+                            </div>
+                            <button id="cropDiastolic" class="btn btn-primary mt-3" disabled>
+                                <i class="fas fa-crop me-2"></i>Crop Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header bg-light">
+                        <h3><i class="fas fa-user-md me-2"></i>Clinical Data</h3>
+                        <div class="progress mt-2">
+                            <div id="formProgress" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="clinicalDataForm">
+                            <ul class="nav nav-tabs" id="clinicalTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="demographics-tab" data-bs-toggle="tab" data-bs-target="#demographics" type="button" role="tab">Demographics</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="medical-tab" data-bs-toggle="tab" data-bs-target="#medical" type="button" role="tab">Medical History</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="lab-tab" data-bs-toggle="tab" data-bs-target="#lab" type="button" role="tab">Lab Values</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="biomarkers-tab" data-bs-toggle="tab" data-bs-target="#biomarkers" type="button" role="tab">Biomarkers</button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content p-3" id="clinicalTabsContent">
+                                <!-- Demographics Tab -->
+                                <div class="tab-pane fade show active" id="demographics" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="age" class="form-label">Age</label>
+                                                <input type="number" class="form-control required-field" id="age">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="gender" class="form-label">Gender</label>
+                                                <select class="form-select required-field" id="gender">
+                                                    <option value="">Select</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="currentSmoker" class="form-label">Current Smoker</label>
+                                                <select class="form-select" id="currentSmoker">
+                                                    <option value="">Select</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="oldSmoker" class="form-label">Former Smoker</label>
+                                                <select class="form-select" id="oldSmoker">
+                                                    <option value="">Select</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Medical History Tab -->
+                                <div class="tab-pane fade" id="medical" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="diabetes" class="form-label">Diabetes</label>
+                                                <select class="form-select" id="diabetes">
+                                                    <option value="">Select</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="hypertension" class="form-label">Hypertension</label>
+                                                <select class="form-select" id="hypertension">
+                                                    <option value="">Select</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="dyslipidemia" class="form-label">Dyslipidemia</label>
+                                                <select class="form-select" id="dyslipidemia">
+                                                    <option value="">Select</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="coronary" class="form-label">Coronary Artery Disease</label>
+                                                <select class="form-select" id="coronary">
+                                                    <option value="">Select</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="antidiabetic" class="form-label">Anti-diabetic Medication</label>
+                                                <select class="form-select" id="antidiabetic">
+                                                    <option value="">Select</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="antihypertensives" class="form-label">Antihypertensive Medication</label>
+                                                <select class="form-select" id="antihypertensives">
+                                                    <option value="">Select</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="stenosis" class="form-label">Stenosis (%)</label>
+                                                <input type="number" class="form-control required-field" id="stenosis" min="0" max="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Lab Values Tab -->
+                                <div class="tab-pane fade" id="lab" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="plt" class="form-label">PLT (K/μl)</label>
+                                                <input type="number" step="0.01" class="form-control" id="plt">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="un" class="form-label">UN (mg/dL)</label>
+                                                <input type="number" step="0.01" class="form-control" id="un">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="cr" class="form-label">Cr (mg/dL)</label>
+                                                <input type="number" step="0.01" class="form-control" id="cr">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="sgot" class="form-label">SGOT (U/L)</label>
+                                                <input type="number" step="0.01" class="form-control" id="sgot">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="sgpt" class="form-label">SGPT (U/L)</label>
+                                                <input type="number" step="0.01" class="form-control" id="sgpt">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="cgt" class="form-label">c-GT (U/L)</label>
+                                                <input type="number" step="0.01" class="form-control" id="cgt">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="alp" class="form-label">ALP (U/L)</label>
+                                                <input type="number" step="0.01" class="form-control" id="alp">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="cho" class="form-label">CHO (mg/dL)</label>
+                                                <input type="number" step="0.01" class="form-control" id="cho">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="tgl" class="form-label">TGL (mg/dL)</label>
+                                                <input type="number" step="0.01" class="form-control" id="tgl">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="hdl" class="form-label">HDL (mg/dL)</label>
+                                                <input type="number" step="0.01" class="form-control" id="hdl">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="ldl" class="form-label">LDL (mg/dL)</label>
+                                                <input type="number" step="0.01" class="form-control" id="ldl">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="glu" class="form-label">GLU (mg/dL)</label>
+                                                <input type="number" step="0.01" class="form-control" id="glu">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Biomarkers Tab -->
+                                <div class="tab-pane fade" id="biomarkers" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="cpr" class="form-label">CPR (ng/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="cpr">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="fibrinogen" class="form-label">Fibrinogen (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="fibrinogen">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="mmp1" class="form-label">MMP-1 (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="mmp1">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="mmp2" class="form-label">MMP-2 (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="mmp2">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="mmp7" class="form-label">MMP-7 (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="mmp7">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="mmp9" class="form-label">MMP-9 (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="mmp9">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="il1b" class="form-label">IL-1β (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="il1b">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="il6" class="form-label">IL-6 (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="il6">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="tnfa" class="form-label">TNFα (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="tnfa">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="timp1" class="form-label">TIMP-1 (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="timp1">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="timp2" class="form-label">TIMP-2 (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="timp2">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="cpeptide" class="form-label">C-peptide (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="cpeptide">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="insulin" class="form-label">Insulin (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="insulin">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="rbp4" class="form-label">RBP4 (pg/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="rbp4">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="galectin3" class="form-label">Galectin3 (ng/ml)</label>
+                                                <input type="number" step="0.01" class="form-control" id="galectin3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <button id="analyzeBtn" class="btn btn-success w-100" disabled>
+                            <i class="fas fa-chart-line me-2"></i>Analyze Plaque Vulnerability
+                        </button>
+                        <div id="resultContainer" class="mt-4">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h4><i class="fas fa-file-medical me-2"></i>Analysis Results</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div id="resultAlert" class="alert">
+                                        <!-- Results will be displayed here -->
+                                    </div>
+                                    <div id="resultDetails" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-header">Risk Score</div>
+                                                    <div class="card-body">
+                                                        <div class="progress">
+                                                            <div id="riskProgress" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                                        </div>
+                                                        <p id="riskScore" class="text-center mt-2 h5"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-header">Key Factors</div>
+                                                    <div class="card-body">
+                                                        <ul id="keyFactors" class="list-group">
+                                                            <!-- Factors will be added here -->
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header">Recommendations</div>
+                                            <div class="card-body">
+                                                <ul id="recommendations" class="list-group">
+                                                    <!-- Recommendations will be added here -->
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for cropping -->
+    <div class="modal fade" id="cropModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-crop me-2"></i>Crop Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="img-container">
+                        <img id="modalImage" src="" class="img-fluid">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveCrop">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mb-0 bg-warning text-dark px-2 py-1 small fw-bold" style="z-index: 1050;">
+                        This tool is for <b>research use only</b> . It is not approved for clinical or diagnostic use.<br>
+                        Any risk assessments or predictions generated by this system are <b>experimental</b> and must not be used as the sole basis for medical decisions.<br>
+                        <b>Clinicians must rely on their professional expertise and a complete set of patient data when making any diagnostic or therapeutic decisions.</b><br>
+                        v0.1 - Alpha
+                    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/cropper.js"></script>
+    <script src="js/tf-model.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        // Add asterisks to required fields on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const requiredFieldIds = [
+                'age',
+                'gender',
+                'stenosis',
+                'hypertension',
+                'diabetes',
+                'ldl',
+                'tgl',  // Triglycerides
+                'cho',  // Cholesterol
+                'cpr'   // C-reactive protein
+            ];
+            
+            requiredFieldIds.forEach(id => {
+                const field = document.getElementById(id);
+                if (field) {
+                    // Find the label for this field
+                    const label = field.closest('.mb-3')?.querySelector('label');
+                    if (label && !label.innerHTML.includes('*')) {
+                        label.innerHTML += ' <span class="text-danger">*</span>';
+                    }
+                    
+                    // Add required attribute
+                    field.setAttribute('required', '');
+                    
+                    // Add required class
+                    field.classList.add('required-field');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
