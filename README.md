@@ -45,11 +45,11 @@ This project implements a web-based prototype Clinical Decision Support System (
 1. Convert your trained model to TensorFlow.js format:
    ```bash
    tensorflowjs_converter --input_format=tf_saved_model path/to/saved_model path/to/model
-Place the converted model in the /model/ directory.
+2. Place the converted model in the /model/ directory.
 
-Open index.html in a modern web browser (no backend/server required).
+3. Open index.html in a modern web browser (no backend/server required).
 
-Upload ultrasound images and clinical data to receive a vulnerability risk assessment.
+4. Upload ultrasound images and clinical data to receive a vulnerability risk assessment.
 
 ## 📌 Notes
 This tool is in the Alpha phase and is for research use only.
@@ -77,15 +77,13 @@ This code is intended for academic, non-commercial research use only. Please con
 ## ✍️ Citation
 If you use this tool or its concepts in your research or publication, please cite the following:
 
-Evangelos Stamos, Deep multimodal fusion of image and non-image data in identification of high-risk carotid atheromatous plaque, National Technical University of Athens, 2025.
-
 BibTeX:
 
-``
+```
 @mastersthesis{stamos2025cdss,
   author = {Evangelos Stamos},
   title = {Deep multimodal fusion of image and non-image data in identification of high-risk carotid atheromatous plaque},
   school = {National Technical University of Athens},
   year = {2025}
 }
-``
+```
