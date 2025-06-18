@@ -2,9 +2,32 @@
 // Note: You'll need to convert your EfficientNet model to TensorFlow.js format
 // and host it in the 'model' directory
 
-let model;
+if (typeof tf === 'undefined') {
+    throw new Error('TensorFlow.js not loaded. Please include TensorFlow.js before this script.');
+}
 
+let model;
+let tfReady = false;
+
+// Initialize TensorFlow.js
+async function initTF() {
+    try {
+        // Wait for TensorFlow to be ready
+        await tf.ready();
+        tfReady = true;
+        console.log('TensorFlow.js is ready');
+    } catch (error) {
+        console.error('Error initializing TensorFlow:', error);
+        throw error;
+    }
+}
+
+// Update your loadModel function
 async function loadModel() {
+    if (!tfReady) {
+        await initTF();
+    }
+
     try {
         model = await tf.loadGraphModel('model/model.json');
         console.log('Model loaded successfully');
